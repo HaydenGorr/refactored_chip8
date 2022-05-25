@@ -13,6 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\rendering">
+      <UniqueIdentifier>{3ca0a6fa-7dfc-40f4-82f6-f5a5bccaf1b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rendering">
+      <UniqueIdentifier>{a6de8f00-bd2e-4c4e-9eaa-feb15342e823}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rendering\imgui">
+      <UniqueIdentifier>{5ad24118-f297-4eae-9d9b-6176c48aecb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rendering\imgui">
+      <UniqueIdentifier>{eaf74c24-7679-4215-a609-db30965753aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rendering\glew">
+      <UniqueIdentifier>{dc6ea0d2-c5f3-483b-890f-eb206c83f573}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="start.cpp">
@@ -27,6 +42,27 @@
     <ClCompile Include="system_memory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>Source Files\rendering\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>Source Files\rendering\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>Source Files\rendering\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>Source Files\rendering\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>Source Files\rendering\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_opengl2.cpp">
+      <Filter>Source Files\rendering\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files\rendering\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cpu.h">
@@ -39,7 +75,49 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="olcPixelGameEngine.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>Header Files\rendering\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>Header Files\rendering\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl2.h">
+      <Filter>Header Files\rendering\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl3.h">
+      <Filter>Header Files\rendering\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_pge.h">
+      <Filter>Header Files\rendering\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>Header Files\rendering\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>Header Files\rendering\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>Header Files\rendering\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>Header Files\rendering\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\includes\eglew.h">
+      <Filter>Header Files\rendering\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\includes\glew.h">
+      <Filter>Header Files\rendering\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\includes\glxew.h">
+      <Filter>Header Files\rendering\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\includes\wglew.h">
+      <Filter>Header Files\rendering\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl3_loader.h">
+      <Filter>Header Files\rendering\imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

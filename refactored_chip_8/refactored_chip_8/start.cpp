@@ -2,12 +2,16 @@
 #include <iostream>
 #include <bitset>
 
+#define PGE_GFX_OPENGL33
+#define OLC_PGEX_DEAR_IMGUI_IMPLEMENTATION
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
 #include "system_memory.h"
 #include "bus.h"
+#include "imgui_impl_pge.h"
 
 #include <fstream>
+
 
 void loadROM(bus& busRef, const std::string inputFile)
 {
@@ -74,59 +78,59 @@ public:
 	}
 };
 
-int main()
+class Example : public olc::PixelGameEngine
 {
-	chip8System newSystem;
+	olc::imgui::PGE_ImGUI pge_imgui;
+	int m_GameLayer;
 
-	loadROM(newSystem.whole_system, "C:\\Users\\hayde\\Downloads\\test_opcode.ch8");
+public:
+	//PGE_ImGui can automatically call the SetLayerCustomRenderFunction by passing
+	//true into the constructor.  false is the default value.
+	Example() : pge_imgui(false)
+	{
+		sAppName = "Test Application";
+	}
 
-	uint16_t newPTR = 0x200;
+public:
+	bool OnUserCreate() override
+	{
+		//Create a new Layer which will be used for the game
+		m_GameLayer = CreateLayer();
+		//The layer is not enabled by default,  so we need to enable it
+		EnableLayer(m_GameLayer, true);
 
-	//// Write the bits to be displayed
-	//newSystem.whole_system.memory.write(0x020F, 0x00);
-	//newSystem.whole_system.memory.write(0x020F, 0xAB);
+		//Set a custom render function on layer 0.  Since DrawUI is a member of
+		//our class, we need to use std::bind
+		//If the pge_imgui was constructed with _register_handler = true, this line is not needed
+		SetLayerCustomRenderFunction(0, std::bind(&Example::DrawUI, this));
 
-	//// Write location of bits to be displayed to I register
-	//newSystem.whole_system.memory.write(newPTR++, 0xA2);
-	//newSystem.whole_system.memory.write(newPTR++, 0x0F);
-	//// read the location of where the bits should be displayed (0,0)
-	//newSystem.whole_system.memory.write(newPTR++, 0x60);
-	//newSystem.whole_system.memory.write(newPTR++, 0x02);
-	//newSystem.whole_system.memory.write(newPTR++, 0x61);
-	//newSystem.whole_system.memory.write(newPTR++, 0x02);
-	//// Draw to the screen
-	//newSystem.whole_system.memory.write(newPTR++, 0xD0);
-	//newSystem.whole_system.memory.write(newPTR++, 0x18);
+		return true;
+	}
 
-	if (newSystem.Construct(newSystem.whole_system.display_res_x, newSystem.whole_system.display_res_y, 16, 16))
-		newSystem.Start();
+	bool OnUserUpdate(float fElapsedTime) override
+	{
+		//Change the Draw Target to not be Layer 0
+		SetDrawTarget((uint8_t)m_GameLayer);
+		//Game Drawing code here
 
-	//uint8_t a = 1, b = 255;
-	//std::bitset<8> x1(a), x2(b);
+		//Create and react to your UI here, it will be drawn during the layer draw function
+		ImGui::ShowDemoWindow();
 
-	//std::cout << x1 << '\n' << x2 << std::endl;
+		return true;
+	}
 
-	/*uint16_t test1 = 0x9F30;
-	uint16_t test2 = test1 & 0x0F00
-		;
-	std::cout << std::hex << test2 << std::endl;
+	void DrawUI(void) {
+		//This finishes the Dear ImGui and renders it to the screen
+		pge_imgui.ImGui_ImplPGE_Render();
+	}
+};
 
-	std::bitset<16> before(test1), after(test2);
-
-	std::cout << before << '\n' << after << std::endl;*/
-
-
-	/*uint16_t a = 0xFFFF;
-	std::bitset<8> x(a);
-
-	std::cout << x << std::endl;
-
-	x = x << 4;
-
-	std::cout << x << std::endl;*/
+int main() {
+	Example demo;
+	if (demo.Construct(64, 32, 4, 4))
+		demo.Start();
 
 	return 0;
 }
-
 
 
