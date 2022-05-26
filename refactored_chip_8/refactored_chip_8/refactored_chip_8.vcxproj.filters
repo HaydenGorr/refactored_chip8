@@ -119,5 +119,8 @@
     <ClInclude Include="imgui\imgui_impl_opengl3_loader.h">
       <Filter>Header Files\rendering\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="memory_viewer.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

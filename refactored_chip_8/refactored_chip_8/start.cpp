@@ -1,17 +1,18 @@
-#include <string>
-#include <iostream>
-#include <bitset>
-
 #define PGE_GFX_OPENGL33
 #define OLC_PGEX_DEAR_IMGUI_IMPLEMENTATION
 #define OLC_PGE_APPLICATION
+
+#include <string>
+#include <iostream>
+#include <bitset>
+#include <fstream>
+
 #include "olcPixelGameEngine.h"
 #include "system_memory.h"
 #include "bus.h"
 #include "imgui_impl_pge.h"
 
-#include <fstream>
-
+#include "memory_viewer.h"
 
 void loadROM(bus& busRef, const std::string inputFile)
 {
@@ -23,65 +24,25 @@ void loadROM(bus& busRef, const std::string inputFile)
 
 	if (size + busRef.memory.min_range <= +busRef.memory.max_range)
 		file.read((char*)busRef.memory.memory + busRef.memory.min_range, size);
-
-	//if (file.read(buffer.data(), size))
-	//{
-	//	uint16_t tempPTR = 0x200;
-	//	for (int i = 0; i < buffer.size(); i+=2)
-	//	{ 
-	//		busRef.memory.write(tempPTR++, instruction);
-	//	}
-	//}
 }
 
-class chip8System : public olc::PixelGameEngine
-{
-public:
-	chip8System()
-	{
-		sAppName = "Chip 8 Emulator";
-	}
 
-	bus whole_system;
+void create_imGui_ui() {
 
-public:
-	bool OnUserCreate() override
-	{
-		// Called once at the start, so create things here
-		return true;
-	}
+	MemoryEditor asd;
 
-	bool OnUserUpdate(float fElapsedTime) override
-	{
-		// called once per frame
-		for (uint8_t y = 0; y < whole_system.display_res_y; y++)
-		{
-			for (uint8_t x = 0; x < whole_system.display_res_x; x++)
-			{
-				if (whole_system.display[y][x] == true)
-				{
-					Draw(x, y, whole_system.currentTheme.primary);
-				}
-				else
-				{
-					Draw(x, y, whole_system.currentTheme.seconday);
-				}
-			}
-		}
+	///asd.DrawWindow("memviewer", ,0xFFF ,0x200);
 
-		if (GetKey(olc::Key::LEFT).bPressed)
-		{
-			whole_system.chip8Sys.run();
-		}
-
-		return true;
-	}
-};
+}
 
 class Example : public olc::PixelGameEngine
 {
 	olc::imgui::PGE_ImGUI pge_imgui;
 	int m_GameLayer;
+	MemoryEditor asd;
+
+public:
+	bus chip8;
 
 public:
 	//PGE_ImGui can automatically call the SetLayerCustomRenderFunction by passing
@@ -92,6 +53,7 @@ public:
 	}
 
 public:
+
 	bool OnUserCreate() override
 	{
 		//Create a new Layer which will be used for the game
@@ -114,7 +76,28 @@ public:
 		//Game Drawing code here
 
 		//Create and react to your UI here, it will be drawn during the layer draw function
-		ImGui::ShowDemoWindow();
+		asd.DrawWindow("Memory viewer ", &chip8.memory.memory, 0xFFF, 0x0);
+
+		// called once per frame
+		for (uint8_t y = 0; y < chip8.display_res_y; y++)
+		{
+			for (uint8_t x = 0; x < chip8.display_res_x; x++)
+			{
+				if (chip8.display[y][x] == true)
+				{
+					Draw(x, y, chip8.currentTheme.primary);
+				}
+				else
+				{
+					Draw(x, y, chip8.currentTheme.seconday);
+				}
+			}
+		}
+
+		if (GetKey(olc::Key::LEFT).bPressed)
+		{
+			chip8.chip8Sys.run();
+		}
 
 		return true;
 	}
@@ -127,8 +110,14 @@ public:
 
 int main() {
 	Example demo;
-	if (demo.Construct(64, 32, 4, 4))
+
+	loadROM(demo.chip8, "C:\\Users\\hayde\\Downloads\\test_opcode.ch8");
+
+	// We add 12 to the resolution to give the chip8 screen a large border
+	// which we need to give room to the	debug window. and because it looks good
+	if (demo.Construct(64, 32, 16, 16))
 		demo.Start();
+
 
 	return 0;
 }
