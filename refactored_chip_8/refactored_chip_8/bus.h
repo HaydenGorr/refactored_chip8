@@ -11,6 +11,10 @@ struct theme {
 	std::string name;
 	olc::Pixel primary;
 	olc::Pixel seconday;
+	bool operator==(const theme& rhs)
+	{
+		return (name == rhs.name);
+	}
 };
 
 class bus {
@@ -38,5 +42,4 @@ public:
 
 	int lastKeyPress;
 	int currentHeldKey;
-
 };

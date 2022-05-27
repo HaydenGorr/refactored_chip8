@@ -18,16 +18,13 @@ private:
 	uint8_t SP; // Stack counter
 
 	// REGISTERS
-	uint8_t registers[16];
 	uint8_t delayTimer;
 	uint8_t soundTimer;
-	uint16_t I; // Address register
-
-	// Flag
-	bool VF;
+	//uint16_t I; // Address register
 
 	// Stack
-	uint16_t stack[16];
+	//uint16_t stack[16];
+	//uint8_t registers[16];
 
 	// Current instruction
 	uint16_t instruction;
@@ -37,6 +34,17 @@ public:
 	~cpu();
 
 	void run();
+
+	uint16_t getPC();
+	uint8_t getSP();
+	uint8_t* getRegister();
+
+	// Registers
+	uint8_t registers[16];
+	// Stack
+	uint16_t stack[16];
+	uint16_t I; // Address register
+
 
 private:
 	// Operations
