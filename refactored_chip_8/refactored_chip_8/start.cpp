@@ -6,6 +6,8 @@
 #include <iostream>
 #include <bitset>
 #include <fstream>
+#include <sstream>
+#include <iomanip>
 
 #include "olcPixelGameEngine.h"
 #include "system_memory.h"
@@ -26,20 +28,16 @@ void loadROM(bus& busRef, const std::string inputFile)
 		file.read((char*)busRef.memory.memory + busRef.memory.min_range, size);
 }
 
-
-void create_imGui_ui() {
-
-	MemoryEditor asd;
-
-	///asd.DrawWindow("memviewer", ,0xFFF ,0x200);
-
-}
-
 class Example : public olc::PixelGameEngine
 {
 	olc::imgui::PGE_ImGUI pge_imgui;
 	int m_GameLayer;
-	MemoryEditor asd;
+
+	bool toggleDebug = true;
+	MemoryEditor debug_memoryViewer;
+
+	float fTargetFrameTime = 1.0f / 60.0f; // Virtual FPS of 60fps
+	float fAccumulatedTime = 0.0f;
 
 public:
 	bus chip8;
@@ -47,7 +45,7 @@ public:
 public:
 	//PGE_ImGui can automatically call the SetLayerCustomRenderFunction by passing
 	//true into the constructor.  false is the default value.
-	Example() : pge_imgui(false)
+	Example() : pge_imgui(false), debug_memoryViewer{ chip8.chip8Sys }
 	{
 		sAppName = "Test Application";
 	}
@@ -66,6 +64,8 @@ public:
 		//If the pge_imgui was constructed with _register_handler = true, this line is not needed
 		SetLayerCustomRenderFunction(0, std::bind(&Example::DrawUI, this));
 
+		std::cout << sizeof(chip8.chip8Sys.getRegister()) << std::endl;
+
 		return true;
 	}
 
@@ -76,7 +76,8 @@ public:
 		//Game Drawing code here
 
 		//Create and react to your UI here, it will be drawn during the layer draw function
-		asd.DrawWindow("Memory viewer ", &chip8.memory.memory, 0xFFF, 0x0);
+		if(toggleDebug)
+			drawImGuiWindows();
 
 		// called once per frame
 		for (uint8_t y = 0; y < chip8.display_res_y; y++)
@@ -94,10 +95,23 @@ public:
 			}
 		}
 
-		if (GetKey(olc::Key::LEFT).bPressed)
+
+
+		fAccumulatedTime += fElapsedTime;
+		if (fAccumulatedTime >= fTargetFrameTime)
 		{
+			//if (GetKey(olc::Key::SPACE).bHeld)
 			chip8.chip8Sys.run();
+
+			fAccumulatedTime -= fTargetFrameTime;
+			fElapsedTime = fTargetFrameTime;
 		}
+
+		if(GetKey(olc::Key::ENTER).bPressed)
+			chip8.chip8Sys.run();
+
+		if (GetKey(olc::Key::T).bPressed)
+			toggleDebug = !toggleDebug;
 
 		return true;
 	}
@@ -106,12 +120,99 @@ public:
 		//This finishes the Dear ImGui and renders it to the screen
 		pge_imgui.ImGui_ImplPGE_Render();
 	}
+
+private:
+	void drawImGuiWindows() {
+		debug_memoryViewer.DrawWindow("Memory viewer ", &chip8.memory.memory, 0xFFF, 0x0);
+
+		ImGui::Begin("Registers");
+
+		for (uint8_t i = 0; i < 16; i++)
+		{
+			std::stringstream ss;
+			ss << "[" << std::hex << static_cast<int>(i) << "]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.registers[i]);
+			const std::string tmp = std::string{ ss.str() };
+			const char* str = tmp.c_str();
+
+			if (chip8.chip8Sys.registers[i] == 0)
+				ImGui::TextDisabled(str);
+			else
+				ImGui::Text(str, i);
+
+		}
+
+
+		std::stringstream ss1;
+		ss1 << "  [I]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.I);
+		const std::string tmp1 = std::string{ ss1.str() };
+		const char* str1 = tmp1.c_str();
+
+		ImGui::Text(str1, 17);
+
+
+		ImGui::End();
+
+		ImGui::Begin("Stack");
+
+		std::stringstream ss;
+		ss << "Stack Pointer: " << static_cast<int>(chip8.chip8Sys.getSP());
+		const std::string tmp = std::string{ ss.str() };
+		const char* str = tmp.c_str();
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), str);
+
+		for (uint8_t i = 0; i < 16; i++)
+		{
+			std::stringstream ss;
+			if (chip8.chip8Sys.getSP() == i)
+				ss << "- [" << std::hex << static_cast<int>(i) << "]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.stack[i]);
+			else
+				ss << "  [" << std::hex << static_cast<int>(i) << "]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.stack[i]);
+			const std::string tmp = std::string{ ss.str() };
+			const char* str = tmp.c_str();
+
+			if (chip8.chip8Sys.stack[i] == 0)
+				ImGui::TextDisabled(str);
+			else
+				ImGui::Text(str, i);
+		}
+		ImGui::End();
+
+
+		ImGui::Begin("Themes");
+
+		//for (uint8_t i = 0; i < 4; i++)
+		//{
+		//	std::stringstream ss;
+		//	ss << "[" << std::hex << static_cast<int>(i) << "]" << " = " << chip8.themes[i].name;
+		//	const std::string tmp = std::string{ ss.str() };
+		//	const char* str = tmp.c_str();
+
+		//	ImGui::Text(str, i);
+		//	if (chip8.currentTheme)
+		//	ImGui::Selectable(str, false);
+
+		//}
+
+		//for (theme& c_theme : chip8.themes) {
+		for (int i=0; i<4; i++){
+			const char* str = chip8.themes[i].name.c_str();
+
+			ImGui::Selectable(str, (chip8.currentTheme == chip8.themes[i]) ? true : false);
+			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+			{
+				chip8.currentTheme = chip8.themes[i];
+			}
+		}
+
+
+		ImGui::End();
+	}
 };
 
 int main() {
 	Example demo;
 
-	loadROM(demo.chip8, "C:\\Users\\hayde\\Downloads\\test_opcode.ch8");
+	loadROM(demo.chip8, "C:\\Users\\hayde\\Downloads\\Sierpinski [Sergey Naydenov, 2010].ch8");
 
 	// We add 12 to the resolution to give the chip8 screen a large border
 	// which we need to give room to the	debug window. and because it looks good

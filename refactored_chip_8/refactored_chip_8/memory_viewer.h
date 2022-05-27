@@ -50,6 +50,7 @@
 
 #include <stdio.h>      // sprintf, scanf
 #include <stdint.h>     // uint8_t, etc.
+#include "cpu.h"
 
 #ifdef _MSC_VER
 #define _PRISizeT   "I"
@@ -88,6 +89,8 @@ struct MemoryEditor
     int             OptAddrDigitsCount;                         // = 0      // number of addr digits to display (default calculated based on maximum displayed addr).
     float           OptFooterExtraHeight;                       // = 0      // space to reserve at the bottom of the widget to add custom widgets
     ImU32           HighlightColor;                             //          // background color of highlighted bytes.
+    ImU32           PRIMARY_HighlightColor;
+    ImU32           SECONDARY_HighlightColor;
     ImU8(*ReadFn)(const ImU8* data, size_t off);    // = 0      // optional handler to read bytes.
     void            (*WriteFn)(ImU8* data, size_t off, ImU8 d); // = 0      // optional handler to write bytes.
     bool            (*HighlightFn)(const ImU8* data, size_t off);//= 0      // optional handler to return Highlight property (to support non-contiguous highlighting).
@@ -104,7 +107,9 @@ struct MemoryEditor
     int             PreviewEndianess;
     ImGuiDataType   PreviewDataType;
 
-    MemoryEditor()
+    cpu& runningCPU;
+
+    MemoryEditor(cpu& cpuRef) : runningCPU{ cpuRef }
     {
         // Settings
         Open = true;
@@ -120,6 +125,8 @@ struct MemoryEditor
         OptAddrDigitsCount = 0;
         OptFooterExtraHeight = 0.0f;
         HighlightColor = IM_COL32(255, 255, 255, 50);
+        PRIMARY_HighlightColor = IM_COL32(0, 102, 255, 100);
+        SECONDARY_HighlightColor = IM_COL32(0, 102, 255, 75);
         ReadFn = NULL;
         WriteFn = NULL;
         HighlightFn = NULL;
@@ -284,7 +291,8 @@ struct MemoryEditor
 
                     // Draw highlight
                     bool is_highlight_from_user_range = (addr >= HighlightMin && addr < HighlightMax);
-                    bool is_highlight_from_user_func = (HighlightFn && HighlightFn(mem_data, addr));
+                    //bool is_highlight_from_user_func = (HighlightFn && HighlightFn(mem_data, addr));
+                    bool is_highlight_from_user_func = (addr == runningCPU.getPC() || addr == runningCPU.getPC()+1);
                     bool is_highlight_from_preview = (addr >= DataPreviewAddr && addr < DataPreviewAddr + preview_data_type_size);
                     if (is_highlight_from_user_range || is_highlight_from_user_func || is_highlight_from_preview)
                     {
@@ -297,7 +305,7 @@ struct MemoryEditor
                             if (OptMidColsCount > 0 && n > 0 && (n + 1) < Cols && ((n + 1) % OptMidColsCount) == 0)
                                 highlight_width += s.SpacingBetweenMidCols;
                         }
-                        draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), HighlightColor);
+                        draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), PRIMARY_HighlightColor);
                     }
 
                     if (DataEditingAddr == addr)

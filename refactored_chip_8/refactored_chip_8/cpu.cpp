@@ -225,6 +225,21 @@ void cpu::run()
 	std::cout << "\n---\n" << std::endl;
 }
 
+uint16_t cpu::getPC()
+{
+	return PC;
+}
+
+uint8_t cpu::getSP()
+{
+	return SP;
+}
+
+uint8_t* cpu::getRegister()
+{
+	return registers;
+}
+
 /*
 * INSTRUCTIONS
 */
@@ -242,7 +257,7 @@ void cpu::CLS()
 
 void cpu::RET()
 {
-	PC = SP--;
+	PC = stack[SP--];
 }
 
 void cpu::JP_1()
@@ -273,12 +288,12 @@ void cpu::SE_2()
 
 void cpu::LD_1()
 {
-	registers[helpers::getSecondNibble(instruction)] = (helpers::getSecondByte(instruction));
+	registers[helpers::getSecondNibble(instruction)] = helpers::getSecondByte(instruction);
 }
 
 void cpu::ADD_1()
 {
-	registers[helpers::getSecondNibble(instruction)] += registers[helpers::getSecondByte(instruction)];
+	registers[helpers::getSecondNibble(instruction)] += helpers::getSecondByte(instruction);
 }
 
 void cpu::LD_2()
@@ -288,7 +303,7 @@ void cpu::LD_2()
 
 void cpu::OR()
 {
-	registers[helpers::getSecondNibble(instruction)] = registers[helpers::getSecondNibble(instruction)] | registers[(helpers::getThirdNibble(instruction))];
+	registers[helpers::getSecondNibble(instruction)] = registers[helpers::getSecondNibble(instruction)] | registers[helpers::getThirdNibble(instruction)];
 }
 
 void cpu::AND()
@@ -305,40 +320,40 @@ void cpu::ADD_2()
 {
 	uint16_t result = registers[helpers::getSecondNibble(instruction)] + registers[helpers::getThirdNibble(instruction)];
 
-	if (result > 0xFF) { VF = true; }
-	else { VF = false; }
+	if (result > 0xFF) { registers[0xF] = 1; }
+	else { registers[0xF] = 0; }
 
 	registers[helpers::getSecondNibble(instruction)] = (uint8_t)result & 0x00FF;
 }
 
 void cpu::SUB()
 {
-	if (registers[helpers::getSecondNibble(instruction)] > registers[helpers::getThirdNibble(instruction)]) { VF = true; }
-	else { VF = false; }
+	if (registers[helpers::getSecondNibble(instruction)] > registers[helpers::getThirdNibble(instruction)]) { registers[0xF] = 1; }
+	else { registers[0xF] = 0; }
 
-	registers[helpers::getSecondNibble(instruction)] -= helpers::getThirdNibble(instruction);
+	registers[helpers::getSecondNibble(instruction)] -= registers[helpers::getThirdNibble(instruction)];
 }
 
 void cpu::SHR()
 {
-	if ((instruction & 0x0001) > 0) { VF = true; } // If least significant bit is 1
-	else { VF = false; }
+	if ((instruction & 0x0001) > 0) { registers[0xF] = 1; } // If least significant bit is 1
+	else { registers[0xF] = 0; }
 
 	registers[helpers::getSecondNibble(instruction)] /= 2;
 }
 
 void cpu::SUBN()
 {
-	if (registers[helpers::getThirdNibble(instruction)] > registers[helpers::getSecondNibble(instruction)]) { VF = true; }
-	else { VF = false; }
+	if (registers[helpers::getThirdNibble(instruction)] > registers[helpers::getSecondNibble(instruction)]) { registers[0xF] = 1; }
+	else { registers[0xF] = 0; }
 
-	registers[helpers::getSecondNibble(instruction)] = helpers::getThirdNibble(instruction) - helpers::getSecondNibble(instruction);
+	registers[helpers::getSecondNibble(instruction)] = registers[helpers::getThirdNibble(instruction)] - registers[helpers::getSecondNibble(instruction)];
 }
 
 void cpu::SHL()
 {
-	if ((instruction & 0x8000) > 0) { VF = true; } // If most significant bit is 1
-	else { VF = false; }
+	if ((instruction & 0x8000) > 0) { registers[0xF] = 1; } // If most significant bit is 1
+	else { registers[0xF] = 0; }
 
 	registers[helpers::getSecondNibble(instruction)] *= 2;
 }
@@ -379,7 +394,12 @@ void cpu::DRW()
 
 		for (int j = 0; j < 8; j++)
 		{
-			bus_link->display[y_pos + i][x_pos + j] = (new_byte >> 7 - j) & 0x0001;
+			if (bus_link->display[y_pos + i][x_pos + j] && (new_byte >> 7 - j) & 0x0001)
+				registers[0xF] = 1;
+			else
+				registers[0xF] = 0;
+
+			bus_link->display[y_pos + i][x_pos + j] ^= (new_byte >> 7 - j) & 0x0001;
 		}
 	}
 }
@@ -440,7 +460,7 @@ void cpu::LD_9()
 
 void cpu::LD_10()
 {
-	for (int i = 0; i < helpers::getSecondNibble(instruction); i++)
+	for (int i = 0; i <= helpers::getSecondNibble(instruction); i++)
 	{
 		bus_link->memory.write(I + i, registers[i]);
 	}
@@ -448,7 +468,7 @@ void cpu::LD_10()
 
 void cpu::LD_11()
 {
-	for (int i = 0; i < helpers::getSecondNibble(instruction); i++)
+	for (int i = 0; i <= helpers::getSecondNibble(instruction); i++)
 	{
 		registers[i] = bus_link->memory.read(I + i);
 	}
