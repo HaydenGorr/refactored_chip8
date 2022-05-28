@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClInclude Include="bus.h" />
     <ClInclude Include="cpu.h" />
+    <ClInclude Include="file_selector.h" />
     <ClInclude Include="glew\includes\eglew.h" />
     <ClInclude Include="glew\includes\glew.h" />
     <ClInclude Include="glew\includes\glxew.h" />

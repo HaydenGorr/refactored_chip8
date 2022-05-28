@@ -33,13 +33,25 @@ namespace helpers {
 	}
 }
 
-cpu::cpu(bus* in_bus_link) : PC{ 0x200 }, SP{ 0xFF }, delayTimer{ 0 }, soundTimer{ 0 }, bus_link{ in_bus_link }
+cpu::cpu(bus* in_bus_link) : PC{ 0x200 }, SP{ 0xFF }, delayTimer{ 0 }, soundTimer{ 0 }, bus_link{ in_bus_link }, instruction{ 0 }
 {
 	srand(time(NULL));
 }
 
 cpu::~cpu()
 {
+}
+
+void cpu::reset()
+{
+	PC = 0x200;
+	SP = 0xFF;
+	delayTimer = 0;
+	soundTimer = 0;
+	instruction = 0;
+	memset(registers, 0, 16); // reset registers
+	memset(stack, 0, 16*2); // reset stack
+	I = 0;
 }
 
 

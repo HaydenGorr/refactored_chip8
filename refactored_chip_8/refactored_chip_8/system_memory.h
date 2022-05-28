@@ -17,7 +17,7 @@ public:
 
 	void write(uint16_t, uint16_t);
 	uint16_t read(uint16_t);
-	void resetMemory();
+	void resetMemory(bool);
 
 	bool streamLoadFromFile(const std::string&);
 

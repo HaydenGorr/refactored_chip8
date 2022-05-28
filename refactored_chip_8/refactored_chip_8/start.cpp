@@ -2,6 +2,8 @@
 #define OLC_PGEX_DEAR_IMGUI_IMPLEMENTATION
 #define OLC_PGE_APPLICATION
 
+#include "olcPixelGameEngine.h"
+
 #include <string>
 #include <iostream>
 #include <bitset>
@@ -9,30 +11,31 @@
 #include <sstream>
 #include <iomanip>
 
-#include "olcPixelGameEngine.h"
 #include "system_memory.h"
 #include "bus.h"
 #include "imgui_impl_pge.h"
 #include "memory_viewer.h"
+#include "file_selector.h"
 
 class Example : public olc::PixelGameEngine
 {
+private:
 	olc::imgui::PGE_ImGUI pge_imgui;
 	int m_GameLayer;
 
 	bool toggleDebug = true;
 	MemoryEditor debug_memoryViewer;
+	file_selector fs_viewer;
 
 	float fTargetFrameTime = 1.0f / 60.0f; // Virtual FPS of 60fps
 	float fAccumulatedTime = 0.0f;
 
-public:
 	bus chip8;
 
 public:
 	//PGE_ImGui can automatically call the SetLayerCustomRenderFunction by passing
 	//true into the constructor.  false is the default value.
-	Example() : pge_imgui(false), debug_memoryViewer{ chip8.chip8Sys }
+	Example() : pge_imgui(false), debug_memoryViewer{ chip8.chip8Sys }, fs_viewer{ chip8 }
 	{
 		sAppName = "Test Application";
 	}
@@ -51,8 +54,6 @@ public:
 		//If the pge_imgui was constructed with _register_handler = true, this line is not needed
 		SetLayerCustomRenderFunction(0, std::bind(&Example::DrawUI, this));
 
-		std::cout << sizeof(chip8.chip8Sys.getRegister()) << std::endl;
-
 		return true;
 	}
 
@@ -60,9 +61,7 @@ public:
 	{
 		//Change the Draw Target to not be Layer 0
 		SetDrawTarget((uint8_t)m_GameLayer);
-		//Game Drawing code here
 
-		//Create and react to your UI here, it will be drawn during the layer draw function
 		if(toggleDebug)
 			drawImGuiWindows();
 
@@ -109,7 +108,8 @@ public:
 private:
 	void drawImGuiWindows() {
 		debug_memoryViewer.DrawWindow("Memory viewer ", &chip8.memory.memory, 0xFFF, 0x0);
-
+		fs_viewer.createWindow();
+		/*
 		ImGui::Begin("Registers");
 
 		for (uint8_t i = 0; i < 16; i++)
@@ -178,19 +178,18 @@ private:
 
 
 		ImGui::End();
+		*/
 	}
 };
 
 int main() {
 	Example demo;
 
-	//demo.chip8.memory.streamLoadFromFile("C:\\Users\\hayde\\Downloads\\maze.ch8");
 
 	// We add 12 to the resolution to give the chip8 screen a large border
-	// which we need to give room to the	debug window. and because it looks good
+	// which we need to give room to the debug window. and because it looks good
 	if (demo.Construct(64, 32, 16, 16))
 		demo.Start();
-
 
 	return 0;
 }
