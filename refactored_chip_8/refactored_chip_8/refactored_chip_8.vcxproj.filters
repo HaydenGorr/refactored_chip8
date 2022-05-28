@@ -28,6 +28,9 @@
     <Filter Include="Header Files\rendering\glew">
       <UniqueIdentifier>{dc6ea0d2-c5f3-483b-890f-eb206c83f573}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\rendering\imgui_UIs">
+      <UniqueIdentifier>{e46778cc-ba68-422d-952c-013027fa90a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="start.cpp">
@@ -119,8 +122,11 @@
     <ClInclude Include="imgui\imgui_impl_opengl3_loader.h">
       <Filter>Header Files\rendering\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="file_selector.h">
+      <Filter>Header Files\rendering\imgui_UIs</Filter>
+    </ClInclude>
     <ClInclude Include="memory_viewer.h">
-      <Filter>Header Files\rendering</Filter>
+      <Filter>Header Files\rendering\imgui_UIs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

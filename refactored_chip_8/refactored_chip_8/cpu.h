@@ -33,6 +33,8 @@ public:
 	cpu(bus*);
 	~cpu();
 
+	void reset();
+
 	void run();
 
 	uint16_t getPC();

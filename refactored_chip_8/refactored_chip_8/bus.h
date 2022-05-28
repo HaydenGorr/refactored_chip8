@@ -22,6 +22,8 @@ public:
 	bus();
 	~bus();
 
+	void reset();
+
 public:
 	cpu chip8Sys;
 	SystemMemory memory;
@@ -42,4 +44,5 @@ public:
 
 	uint8_t lastKeyPress;
 	uint8_t currentHeldKey;
+
 };

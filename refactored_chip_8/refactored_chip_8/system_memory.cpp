@@ -55,9 +55,9 @@ uint16_t SystemMemory::read(uint16_t in_addr)
 		return memory[in_addr];
 }
 
-void SystemMemory::resetMemory()
+void SystemMemory::resetMemory(bool retainChars = false)
 {
-	std::memset(memory, 0, sizeof(memory));
+	std::memset(memory, (retainChars) ? 0x200 : 0, sizeof(memory));
 }
 
 bool SystemMemory::streamLoadFromFile(const std::string& fileURL)
