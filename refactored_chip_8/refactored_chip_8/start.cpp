@@ -13,7 +13,6 @@
 #include "system_memory.h"
 #include "bus.h"
 #include "imgui_impl_pge.h"
-
 #include "memory_viewer.h"
 
 void loadROM(bus& busRef, const std::string inputFile)
