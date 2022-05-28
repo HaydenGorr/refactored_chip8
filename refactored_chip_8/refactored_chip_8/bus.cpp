@@ -12,4 +12,5 @@ void bus::reset()
 {
 	chip8Sys.reset();
 	memset(display, 0, 32 * 64); // reset display
+	memory.resetMemory(true, true);
 }

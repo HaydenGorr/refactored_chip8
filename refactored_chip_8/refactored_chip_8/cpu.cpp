@@ -64,8 +64,8 @@ void cpu::run()
 	uint16_t id_1 = helpers::getFirstNibble(instruction), id_2 = helpers::getFourthNibble(instruction), id_3 = helpers::getThirdNibble(instruction);
 
 #ifdef chip_debug
-	std::cout << "PC: " << PC << std::endl;
-	std::cout << "instruction: " << std::hex << instruction << std::endl;
+	//std::cout << "PC: " << PC << std::endl;
+	//std::cout << "instruction: " << std::hex << instruction << std::endl;
 #endif
 
 	uint16_t firstN = helpers::getFirstNibble(instruction), thirdN = helpers::getThirdNibble(instruction), fourthN = helpers::getFourthNibble(instruction), lastByte = helpers::getSecondByte(instruction);
@@ -76,117 +76,91 @@ void cpu::run()
 		switch (instruction)
 		{
 		case 0x00E0:
-			std::cout << "CLS()" << std::endl;
 			CLS();
 			break;
 		case 0x00EE:
-			std::cout << "RET()" << std::endl;
 			RET();
 			break;
 		default:
-			std::cout << "SYS()" << std::endl;
 			SYS();
 			break;
 		}
 		break;
 	case 1:
-		std::cout << "JP_1()" << std::endl;
 		JP_1();
 		break;
 	case 2:
-		std::cout << "CALL()" << std::endl;
 		CALL();
 		break;
 	case 3:
-		std::cout << "SE_1()" << std::endl;
 		SE_1();
 		break;
 	case 4:
-		std::cout << "SNE_1()" << std::endl;
 		SNE_1();
 		break;
 	case 5:
-		std::cout << "SE_2()" << std::endl;
 		SE_2();
 		break;
 	case 6:
-		std::cout << "LD_1()" << std::endl;
 		LD_1();
 		break;
 	case 7:
-		std::cout << "ADD_1()" << std::endl;
 		ADD_1();
 		break;
 	case 8:
 		switch (fourthN)
 		{
 		case 0:
-			std::cout << "LD_2()" << std::endl;
 			LD_2();
 			break;
 		case 1:
-			std::cout << "OR()" << std::endl;
 			OR();
 			break;
 		case 2:
-			std::cout << "AND()" << std::endl;
 			AND();
 			break;
 		case 3:
-			std::cout << "XOR()" << std::endl;
 			XOR();
 			break;
 		case 4:
-			std::cout << "ADD_2()" << std::endl;
 			ADD_2();
 			break;
 		case 5:
-			std::cout << "SUB()" << std::endl;
 			SUB();
 			break;
 		case 6:
-			std::cout << "SHR()" << std::endl;
 			SHR();
 			break;
 		case 7:
-			std::cout << "SUBN()" << std::endl;
 			SUBN();
 			break;
 		case 0xE:
-			std::cout << "SHL()" << std::endl;
 			SHL();
 			break;
 		}
 		break;
 	case 9:
-		std::cout << "SNE_2()" << std::endl;
 		SNE_2();
 		break;
 	case 0xA:
-		std::cout << "LD_3()" << std::endl;
 		LD_3();
 		break;
 	case 0xB:
-		std::cout << "JP_2()" << std::endl;
 		JP_2();
 		break;
 	case 0xC:
-		std::cout << "RND()" << std::endl;
 		RND();
 		break;
 	case 0xD:
-		std::cout << "DRW()" << std::endl;
 		DRW();
 		break;
 	case 0xE:
 		switch (fourthN)
 		{
 		case 0xE:
-			std::cout << "SKP()" << std::endl;
 			SKP();
 			break;
 		case 0x1:
-			std::cout << "SKNP()" << std::endl;
 			SKNP();
 			break;
 		}
@@ -195,46 +169,35 @@ void cpu::run()
 		switch (lastByte)
 		{
 		case 0x07:
-			std::cout << "LD_4()" << std::endl;
 			LD_4();
 			break;
 		case 0x0A:
-			std::cout << "LD_5()" << std::endl;
 			LD_5();
 			break;
 		case 0x15:
-			std::cout << "LD_6()" << std::endl;
 			LD_6();
 			break;
 		case 0x18:
-			std::cout << "LD_7()" << std::endl;
 			LD_7();
 			break;
 		case 0x1E:
-			std::cout << "ADD_3()" << std::endl;
 			ADD_3();
 			break;
 		case 0x29:
-			std::cout << "LD_8()" << std::endl;
 			LD_8();
 			break;
 		case 0x33:
-			std::cout << "LD_9()" << std::endl;
 			LD_9();
 			break;
 		case 0x55:
-			std::cout << "LD_10()" << std::endl;
 			LD_10();
 			break;
 		case 0x65:
-			std::cout << "LD_11()" << std::endl;
 			LD_11();
 			break;
 		}
 		break;
 	}
-
-	std::cout << "\n---\n" << std::endl;
 }
 
 uint16_t cpu::getPC()
@@ -250,6 +213,178 @@ uint8_t cpu::getSP()
 uint8_t* cpu::getRegister()
 {
 	return registers;
+}
+
+std::string cpu::opStr_instruction(uint16_t in_instruction)
+{
+	std::string op_str;
+
+	uint16_t firstN = helpers::getFirstNibble(in_instruction), thirdN = helpers::getThirdNibble(in_instruction), fourthN = helpers::getFourthNibble(in_instruction), lastByte = helpers::getSecondByte(in_instruction);
+
+	switch (firstN)
+	{
+	case 0:
+		switch (instruction)
+		{
+		case 0x00E0:
+			op_str = "CLS()";
+			CLS();
+			break;
+		case 0x00EE:
+			op_str = "RET()";
+			RET();
+			break;
+		default:
+			op_str = "SYS()";
+			SYS();
+			break;
+		}
+		break;
+	case 1:
+		op_str = "JP_1()";
+		JP_1();
+		break;
+	case 2:
+		op_str = "CALL()";
+		CALL();				
+		break;				
+	case 3:					
+		op_str = "SE_1()";
+		SE_1();			
+		break;			
+	case 4:				
+		op_str = "SNE_1()";
+		SNE_1();			
+		break;				
+	case 5:					
+		op_str = "SE_2()";
+		SE_2();				
+		break;				
+	case 6:					
+		op_str = "LD_1()";
+		LD_1();				
+		break;				
+	case 7:					
+		op_str = "ADD_1()";
+		ADD_1();
+		break;
+	case 8:
+		switch (fourthN)
+		{
+		case 0:
+			op_str = "LD_2()";
+			LD_2();
+			break;
+		case 1:
+			op_str = "OR()";
+			OR();
+			break;
+		case 2:
+			op_str = "AND()";
+			AND();
+			break;
+		case 3:
+			op_str = "XOR()";
+			XOR();
+			break;
+		case 4:
+			op_str = "ADD_2()";
+			ADD_2();
+			break;
+		case 5:
+			op_str = "SUB()";
+			SUB();
+			break;
+		case 6:
+			op_str = "SHR()";
+			SHR();
+			break;
+		case 7:
+			op_str = "SUBN()";
+			SUBN();
+			break;
+		case 0xE:
+			op_str = "SHL()";
+			SHL();
+			break;
+		}
+		break;
+	case 9:
+		op_str = "SNE_2()";
+		SNE_2();
+		break;
+	case 0xA:
+		op_str = "LD_3()";
+		LD_3();
+		break;
+	case 0xB:
+		op_str = "JP_2()";
+		JP_2();
+		break;
+	case 0xC:
+		op_str = "RND()";
+		RND();
+		break;
+	case 0xD:
+		op_str = "DRW()";
+		DRW();
+		break;
+	case 0xE:
+		switch (fourthN)
+		{
+		case 0xE:
+			std::cout << "SKP()";
+			SKP();
+			break;
+		case 0x1:
+			std::cout << "SKNP()";
+			SKNP();
+			break;
+		}
+		break;
+	case 0xF:
+		switch (lastByte)
+		{
+		case 0x07:
+			op_str = "LD_4()";
+			LD_4();
+			break;
+		case 0x0A:
+			op_str = "LD_5()";
+			LD_5();
+			break;
+		case 0x15:
+			op_str = "LD_6()";
+			LD_6();
+			break;
+		case 0x18:
+			op_str = "LD_7()";
+			LD_7();
+			break;
+		case 0x1E:
+			op_str = "ADD_3()";
+			ADD_3();
+			break;
+		case 0x29:
+			op_str = "LD_8()";
+			LD_8();
+			break;
+		case 0x33:
+			op_str = "LD_9()";
+			LD_9();
+			break;
+		case 0x55:
+			op_str = "LD_10()";
+			LD_10();
+			break;
+		case 0x65:
+			op_str = "LD_11()";
+			LD_11();
+			break;
+		}
+		break;
+	}
+	return std::string();
 }
 
 /*

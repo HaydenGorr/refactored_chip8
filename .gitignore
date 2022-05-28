@@ -396,3 +396,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+refactored_chip_8/refactored_chip_8/imgui.ini

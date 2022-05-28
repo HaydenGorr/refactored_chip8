@@ -109,7 +109,7 @@ private:
 	void drawImGuiWindows() {
 		debug_memoryViewer.DrawWindow("Memory viewer ", &chip8.memory.memory, 0xFFF, 0x0);
 		fs_viewer.createWindow();
-		/*
+		
 		ImGui::Begin("Registers");
 
 		for (uint8_t i = 0; i < 16; i++)
@@ -178,7 +178,7 @@ private:
 
 
 		ImGui::End();
-		*/
+		
 	}
 };
 

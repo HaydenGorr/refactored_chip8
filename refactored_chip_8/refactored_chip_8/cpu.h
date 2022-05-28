@@ -47,6 +47,8 @@ public:
 	uint16_t stack[16];
 	uint16_t I; // Address register
 
+	// Get the opcode string from an instruction
+	std::string opStr_instruction(uint16_t);
 
 private:
 	// Operations
