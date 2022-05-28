@@ -21,6 +21,10 @@ namespace chip8_sprites {
 	};
 }
 
+namespace default_loop_program {
+
+}
+
 SystemMemory::SystemMemory()
 {
 	// Load standard sprites
@@ -28,6 +32,11 @@ SystemMemory::SystemMemory()
 	for (auto& sprite : chip8_sprites::char_sprites)
 		for (auto& row : sprite)
 			force_write(loadPtr++, row);
+
+	// Load the program loop
+	// This will cause the system to remain "on" without a rom loaded
+	write(0x200, 0x00);
+	write(0x200, 0x12);
 }
 
 SystemMemory::~SystemMemory()
@@ -38,8 +47,6 @@ void SystemMemory::write(uint16_t in_addr, uint16_t data)
 {
 	if (in_addr <= max_range && in_addr >= min_range)
 		memory[in_addr] = data;
-	else
-		std::cout << "did not write " << data << " to location " << in_addr << " because location is out of writable range" << std::endl;
 }
 
 uint16_t SystemMemory::read(uint16_t in_addr)
@@ -51,6 +58,20 @@ uint16_t SystemMemory::read(uint16_t in_addr)
 void SystemMemory::resetMemory()
 {
 	std::memset(memory, 0, sizeof(memory));
+}
+
+bool SystemMemory::streamLoadFromFile(const std::string& fileURL)
+{
+	std::ifstream file(fileURL, std::ios::binary | std::ios::ate);
+	std::streamsize size = file.tellg();
+	file.seekg(0, std::ios::beg);
+
+	std::vector<char> buffer(size);
+
+	if (size + min_range <= +max_range)
+		file.read((char*)memory + min_range, size);
+
+	return false;
 }
 
 void SystemMemory::force_write(uint16_t in_addr, uint16_t data)

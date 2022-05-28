@@ -40,6 +40,6 @@ public:
 
 	theme& currentTheme;
 
-	int lastKeyPress;
-	int currentHeldKey;
+	uint8_t lastKeyPress;
+	uint8_t currentHeldKey;
 };

@@ -1,6 +1,8 @@
 #pragma once
 #include <cstdint>
 #include <iostream>
+#include <fstream>
+#include <vector>
 
 class SystemMemory {
 public:
@@ -16,6 +18,9 @@ public:
 	void write(uint16_t, uint16_t);
 	uint16_t read(uint16_t);
 	void resetMemory();
+
+	bool streamLoadFromFile(const std::string&);
+
 private:
 	void force_write(uint16_t, uint16_t);
 

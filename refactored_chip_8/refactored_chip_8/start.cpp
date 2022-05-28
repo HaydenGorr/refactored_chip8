@@ -15,18 +15,6 @@
 #include "imgui_impl_pge.h"
 #include "memory_viewer.h"
 
-void loadROM(bus& busRef, const std::string inputFile)
-{
-	std::ifstream file(inputFile, std::ios::binary | std::ios::ate);
-	std::streamsize size = file.tellg();
-	file.seekg(0, std::ios::beg);
-
-	std::vector<char> buffer(size);
-
-	if (size + busRef.memory.min_range <= +busRef.memory.max_range)
-		file.read((char*)busRef.memory.memory + busRef.memory.min_range, size);
-}
-
 class Example : public olc::PixelGameEngine
 {
 	olc::imgui::PGE_ImGUI pge_imgui;
@@ -93,8 +81,6 @@ public:
 				}
 			}
 		}
-
-
 
 		fAccumulatedTime += fElapsedTime;
 		if (fAccumulatedTime >= fTargetFrameTime)
@@ -179,19 +165,6 @@ private:
 
 		ImGui::Begin("Themes");
 
-		//for (uint8_t i = 0; i < 4; i++)
-		//{
-		//	std::stringstream ss;
-		//	ss << "[" << std::hex << static_cast<int>(i) << "]" << " = " << chip8.themes[i].name;
-		//	const std::string tmp = std::string{ ss.str() };
-		//	const char* str = tmp.c_str();
-
-		//	ImGui::Text(str, i);
-		//	if (chip8.currentTheme)
-		//	ImGui::Selectable(str, false);
-
-		//}
-
 		//for (theme& c_theme : chip8.themes) {
 		for (int i=0; i<4; i++){
 			const char* str = chip8.themes[i].name.c_str();
@@ -211,7 +184,7 @@ private:
 int main() {
 	Example demo;
 
-	loadROM(demo.chip8, "C:\\Users\\hayde\\Downloads\\Sierpinski [Sergey Naydenov, 2010].ch8");
+	//demo.chip8.memory.streamLoadFromFile("C:\\Users\\hayde\\Downloads\\maze.ch8");
 
 	// We add 12 to the resolution to give the chip8 screen a large border
 	// which we need to give room to the	debug window. and because it looks good
