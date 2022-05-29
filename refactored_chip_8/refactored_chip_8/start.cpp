@@ -27,7 +27,7 @@ private:
 	MemoryEditor debug_memoryViewer;
 	file_selector fs_viewer;
 
-	float fTargetFrameTime = 1.0f / 60.0f; // Virtual FPS of 60fps
+	float fTargetFrameTime = 1.0f / 500.0f; // Virtual FPS of 60fps
 	float fAccumulatedTime = 0.0f;
 
 	bus chip8;
