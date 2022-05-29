@@ -541,11 +541,12 @@ void cpu::DRW()
 
 		for (int j = 0; j < 8; j++)
 		{
-			if (bus_link->display[y_pos + i][x_pos + j] && (new_byte >> 7 - j) & 0x0001)
+			if (bus_link->display[y_pos + i][x_pos + j] && (new_byte >> 7 - j) & 0x0001) {
 				registers[0xF] = 1;
-			else
+			}
+			else {
 				registers[0xF] = 0;
-
+			}
 			bus_link->display[y_pos + i][x_pos + j] ^= (new_byte >> 7 - j) & 0x0001;
 		}
 	}
