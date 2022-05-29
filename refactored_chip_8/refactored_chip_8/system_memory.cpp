@@ -70,12 +70,9 @@ void SystemMemory::resetMemory(bool retainChars, bool loadLoop)
 		std::memset(memory, 0, sizeof(memory));
 
 	if (loadLoop) {
-		write(0x200, 0x00);
-		write(0x200, 0x12);
+		// Load homescreen loop
+		std::memcpy(memory + 0x200, homescreen::homescreen_loop, sizeof homescreen::homescreen_loop);
 	}
-
-	// Load homescreen loop
-	std::memcpy(memory + 0x200, homescreen::homescreen_loop, sizeof homescreen::homescreen_loop);
 
 }
 
