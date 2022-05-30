@@ -4,18 +4,7 @@
 
 #include "cpu.h"
 #include "system_memory.h"
-
-#include "olcPixelGameEngine.h"
-
-struct theme {
-	std::string name;
-	olc::Pixel primary;
-	olc::Pixel seconday;
-	bool operator==(const theme& rhs)
-	{
-		return (name == rhs.name);
-	}
-};
+#include "themes.h"
 
 class bus {
 public:
@@ -33,11 +22,12 @@ public:
 
 	bool display[32][64];
 
-	theme themes[4] = {
-		theme { "Macintosh", olc::Pixel(51, 51, 25, 255), olc::Pixel(229, 255, 255, 255)},
-		theme { "Zenith", olc::Pixel(63, 41, 30, 255), olc::Pixel(253, 202, 85, 255)},
-		theme { "IBM 8053", olc::Pixel(46,48,55,255), olc::Pixel(235,229,206,255)},
-		theme { "Commodore 1084", olc::Pixel(64,49,142,255), olc::Pixel(136,215,222,255)}
+	theme themes[5] = {
+		theme{"Macintosh", t_vect4{51, 51, 25, 255}, t_vect4{229, 255, 255, 255 }},
+		theme{"Zenith", t_vect4{63, 41, 30, 255}, t_vect4{253, 202, 85, 255 }},
+		theme{"IBM 8053", t_vect4{ 46, 48, 55, 255 }, t_vect4{ 235, 229, 206, 255 }},
+		theme{"Commodore 1084", t_vect4{64, 49, 142, 255}, t_vect4{136, 215, 222, 255}},
+		theme{"IBM 5151", t_vect4{37, 51, 47, 255}, t_vect4{1, 235, 97, 255}}
 	};
 
 	theme& currentTheme;

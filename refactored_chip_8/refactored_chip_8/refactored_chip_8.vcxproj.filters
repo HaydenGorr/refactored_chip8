@@ -128,5 +128,8 @@
     <ClInclude Include="memory_viewer.h">
       <Filter>Header Files\rendering\imgui_UIs</Filter>
     </ClInclude>
+    <ClInclude Include="themes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
