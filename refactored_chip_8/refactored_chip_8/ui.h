@@ -2,6 +2,7 @@
 #include "access_filesystem.h"
 #include "File_Select_UI.h"
 #include "bus.h"
+#include "themes.h"
 
 
 class ui {
@@ -104,15 +105,14 @@ public:
 
 				if (ImGui::BeginPopupContextItem())
 				{
-					std::cout << theme.IM_primaryColour << std::endl;
 					ImGui::Text("Edit colours", theme.name.c_str());
 					ImGui::Separator();
 					ImGui::Text("Primary Colour");
 					ImGui::SameLine();
-					ImGui::ColorEdit4("MyColor##1", (float*)&theme.IM_primaryColour, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+					ImGui::ColorEdit4("MyColor##1", (float*)&theme.p_col, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 					ImGui::Text("Secondary Colour");
 					ImGui::SameLine();
-					ImGui::ColorEdit4("MyColor##2", (float*)&theme.IM_secondColour, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+					ImGui::ColorEdit4("MyColor##2", (float*)&theme.s_col, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 					if (ImGui::Button("Close"))
 						ImGui::CloseCurrentPopup();
 					ImGui::EndPopup();
