@@ -1,7 +1,6 @@
 #pragma once
 #include <cstdint>
 #include <string>
-#include <bitset>
 
 struct t_vect4{	uint8_t r, g, b, a;};
 
@@ -23,5 +22,5 @@ struct theme {
 		p32 = inP.r | (inP.g << 8) | (inP.b << 16) | (inP.a << 24);
 		s32 = inS.r | (inS.g << 8) | (inS.b << 16) | (inS.a << 24);
 
-	} // 01010001 01010001 00100101 11111111
+	}
 };
