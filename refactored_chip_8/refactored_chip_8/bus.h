@@ -4,33 +4,7 @@
 
 #include "cpu.h"
 #include "system_memory.h"
-#include "directxmath.h"
-
-#include "olcPixelGameEngine.h"
-
-struct colour_vec
-{
-	float r, g, b, a;
-};
-
-struct theme {
-	std::string name;
-	olc::Pixel primary;
-	olc::Pixel seconday;
-	float IM_primaryColour[4];
-	float IM_secondColour[4];
-
-	theme(std::string inName, colour_vec P, colour_vec S) : name{inName}, primary { P.r, P.g, P.b, P.a }, seconday{ olc::Pixel(S.r, S.g, S.b, S.a) }, IM_primaryColour{ P.r, P.g, P.b, P.a }, IM_secondColour{ S.r, S.g, S.b, S.a }{}
-
-	bool operator==(const theme& rhs)
-	{
-		return (name == rhs.name);
-	}
-
-	void setPColour() {
-
-	}
-};
+#include "themes.h"
 
 class bus {
 public:
@@ -48,11 +22,12 @@ public:
 
 	bool display[32][64];
 
-	theme themes[4] = {
-		theme ( "Macintosh", colour_vec{51, 51, 25, 255}, colour_vec{229, 255, 255, 255} ),
-		theme ( "Zenith", colour_vec{63, 41, 30, 255}, colour_vec{253, 202, 85, 255 }),
-		theme ( "IBM 8053", colour_vec{46,48,55,255 }, colour_vec{235, 229, 206, 255}),
-		theme ( "Commodore 1084", colour_vec{64,49,142,255 }, colour_vec{136, 215, 222, 255})
+	theme themes[5] = {
+		theme{"Macintosh", t_vect4{51, 51, 25, 255}, t_vect4{229, 255, 255, 255 }},
+		theme{"Zenith", t_vect4{63, 41, 30, 255}, t_vect4{253, 202, 85, 255 }},
+		theme{"IBM 8053", t_vect4{ 46, 48, 55, 255 }, t_vect4{ 235, 229, 206, 255 }},
+		theme{"Commodore 1084", t_vect4{64, 49, 142, 255}, t_vect4{136, 215, 222, 255}},
+		theme{"IBM 5151", t_vect4{37, 51, 47, 255}, t_vect4{1, 235, 97, 255}}
 	};
 
 	theme& currentTheme;

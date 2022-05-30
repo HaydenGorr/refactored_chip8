@@ -187,6 +187,7 @@
     <ClInclude Include="olcPixelGameEngine.h" />
     <ClInclude Include="system_memory.h" />
     <ClInclude Include="ui.h" />
+    <ClInclude Include="themes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

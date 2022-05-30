@@ -72,11 +72,11 @@ public:
 			{
 				if (chip8.display[y][x] == true)
 				{
-					Draw(x, y, chip8.currentTheme.primary);
+					Draw(x, y, chip8.currentTheme.p32);
 				}
 				else
 				{
-					Draw(x, y, chip8.currentTheme.seconday);
+					Draw(x, y, chip8.currentTheme.s32);
 				}
 			}
 		}
@@ -168,8 +168,8 @@ private:
 
 		//ImGui::Begin("Themes");
 
-		////for (theme& c_theme : chip8.themes) {
-		//for (int i = 0; i < 4; i++) {
+		//for (theme& c_theme : chip8.themes) {
+		//for (int i=0; i<5; i++){
 		//	const char* str = chip8.themes[i].name.c_str();
 
 		//	ImGui::Selectable(str, chip8.currentTheme == chip8.themes[i]);
