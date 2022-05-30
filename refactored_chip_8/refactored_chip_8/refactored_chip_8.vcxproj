@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="access_filesystem.cpp" />
     <ClCompile Include="bus.cpp" />
     <ClCompile Include="cpu.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -165,9 +166,9 @@
     <ClCompile Include="system_memory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="access_filesystem.h" />
     <ClInclude Include="bus.h" />
     <ClInclude Include="cpu.h" />
-    <ClInclude Include="file_selector.h" />
     <ClInclude Include="glew\includes\eglew.h" />
     <ClInclude Include="glew\includes\glew.h" />
     <ClInclude Include="glew\includes\glxew.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="memory_viewer.h" />
     <ClInclude Include="olcPixelGameEngine.h" />
     <ClInclude Include="system_memory.h" />
+    <ClInclude Include="ui.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

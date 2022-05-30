@@ -31,6 +31,12 @@
     <Filter Include="Header Files\rendering\imgui_UIs">
       <UniqueIdentifier>{e46778cc-ba68-422d-952c-013027fa90a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\helpers">
+      <UniqueIdentifier>{d6b32623-bdfb-4531-9063-3ad9dedb2240}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\helpers">
+      <UniqueIdentifier>{161ac22e-fdd5-4b36-8978-30849a3bdf5f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="start.cpp">
@@ -65,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
       <Filter>Source Files\rendering\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="access_filesystem.cpp">
+      <Filter>Source Files\helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -122,11 +131,14 @@
     <ClInclude Include="imgui\imgui_impl_opengl3_loader.h">
       <Filter>Header Files\rendering\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="file_selector.h">
-      <Filter>Header Files\rendering\imgui_UIs</Filter>
-    </ClInclude>
     <ClInclude Include="memory_viewer.h">
       <Filter>Header Files\rendering\imgui_UIs</Filter>
+    </ClInclude>
+    <ClInclude Include="ui.h">
+      <Filter>Header Files\rendering\imgui_UIs</Filter>
+    </ClInclude>
+    <ClInclude Include="access_filesystem.h">
+      <Filter>Header Files\helpers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

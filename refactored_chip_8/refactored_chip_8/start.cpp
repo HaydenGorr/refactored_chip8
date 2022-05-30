@@ -15,7 +15,7 @@
 #include "bus.h"
 #include "imgui_impl_pge.h"
 #include "memory_viewer.h"
-#include "file_selector.h"
+#include "ui.h"
 
 class Example : public olc::PixelGameEngine
 {
@@ -25,7 +25,7 @@ private:
 
 	bool toggleDebug = true;
 	MemoryEditor debug_memoryViewer;
-	file_selector fs_viewer;
+	ui entire_ui;
 
 	float fTargetFrameTime = 1.0f / 500.0f; // Virtual FPS of 60fps
 	float fAccumulatedTime = 0.0f;
@@ -35,7 +35,7 @@ private:
 public:
 	//PGE_ImGui can automatically call the SetLayerCustomRenderFunction by passing
 	//true into the constructor.  false is the default value.
-	Example() : pge_imgui(false), debug_memoryViewer{ chip8.chip8Sys }, fs_viewer{ chip8 }
+	Example() : pge_imgui(false), debug_memoryViewer{ chip8.chip8Sys }, entire_ui{ chip8 }
 	{
 		sAppName = "Test Application";
 	}
@@ -107,77 +107,81 @@ public:
 
 private:
 	void drawImGuiWindows() {
-		debug_memoryViewer.DrawWindow("Memory viewer ", &chip8.memory.memory, 0xFFF, 0x0);
-		fs_viewer.createWindow();
+		//debug_memoryViewer.DrawWindow("Memory viewer ", &chip8.memory.memory, 0xFFF, 0x0);
+		//fs_viewer.createWindow();
+		entire_ui.draw();
+
+		return;
 		
-		ImGui::Begin("Registers");
+		//ImGui::Begin("Registers");
 
-		for (uint8_t i = 0; i < 16; i++)
-		{
-			std::stringstream ss;
-			ss << "[" << std::hex << static_cast<int>(i) << "]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.registers[i]);
-			const std::string tmp = std::string{ ss.str() };
-			const char* str = tmp.c_str();
+		//for (uint8_t i = 0; i < 16; i++)
+		//{
+		//	std::stringstream ss;
+		//	ss << "[" << std::hex << static_cast<int>(i) << "]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.registers[i]);
+		//	const std::string tmp = std::string{ ss.str() };
+		//	const char* str = tmp.c_str();
 
-			if (chip8.chip8Sys.registers[i] == 0)
-				ImGui::TextDisabled(str);
-			else
-				ImGui::Text(str, i);
+		//	if (chip8.chip8Sys.registers[i] == 0)
+		//		ImGui::TextDisabled(str);
+		//	else
+		//		ImGui::Text(str, i);
 
-		}
-
-
-		std::stringstream ss1;
-		ss1 << "  [I]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.I);
-		const std::string tmp1 = std::string{ ss1.str() };
-		const char* str1 = tmp1.c_str();
-
-		ImGui::Text(str1, 17);
+		//}
 
 
-		ImGui::End();
+		//std::stringstream ss1;
+		//ss1 << "  [I]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.I);
+		//const std::string tmp1 = std::string{ ss1.str() };
+		//const char* str1 = tmp1.c_str();
 
-		ImGui::Begin("Stack");
-
-		std::stringstream ss;
-		ss << "Stack Pointer: " << static_cast<int>(chip8.chip8Sys.getSP());
-		const std::string tmp = std::string{ ss.str() };
-		const char* str = tmp.c_str();
-		ImGui::TextColored(ImVec4(1, 1, 0, 1), str);
-
-		for (uint8_t i = 0; i < 16; i++)
-		{
-			std::stringstream ss;
-			if (chip8.chip8Sys.getSP() == i)
-				ss << "- [" << std::hex << static_cast<int>(i) << "]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.stack[i]);
-			else
-				ss << "  [" << std::hex << static_cast<int>(i) << "]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.stack[i]);
-			const std::string tmp = std::string{ ss.str() };
-			const char* str = tmp.c_str();
-
-			if (chip8.chip8Sys.stack[i] == 0)
-				ImGui::TextDisabled(str);
-			else
-				ImGui::Text(str, i);
-		}
-		ImGui::End();
+		//ImGui::Text(str1, 17);
 
 
-		ImGui::Begin("Themes");
+		//ImGui::End();
 
-		//for (theme& c_theme : chip8.themes) {
-		for (int i=0; i<4; i++){
-			const char* str = chip8.themes[i].name.c_str();
+		//ImGui::Begin("Stack");
 
-			ImGui::Selectable(str, (chip8.currentTheme == chip8.themes[i]) ? true : false);
-			if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
-			{
-				chip8.currentTheme = chip8.themes[i];
-			}
-		}
+		//std::stringstream ss;
+		//ss << "Stack Pointer: " << static_cast<int>(chip8.chip8Sys.getSP());
+		//const std::string tmp = std::string{ ss.str() };
+		//const char* str = tmp.c_str();
+		//ImGui::TextColored(ImVec4(1, 1, 0, 1), str);
+
+		//for (uint8_t i = 0; i < 16; i++)
+		//{
+		//	std::stringstream ss;
+		//	if (chip8.chip8Sys.getSP() == i)
+		//		ss << "- [" << std::hex << static_cast<int>(i) << "]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.stack[i]);
+		//	else
+		//		ss << "  [" << std::hex << static_cast<int>(i) << "]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.stack[i]);
+		//	const std::string tmp = std::string{ ss.str() };
+		//	const char* str = tmp.c_str();
+
+		//	if (chip8.chip8Sys.stack[i] == 0)
+		//		ImGui::TextDisabled(str);
+		//	else
+		//		ImGui::Text(str, i);
+		//}
+		//ImGui::End();
 
 
-		ImGui::End();
+		//ImGui::Begin("Themes");
+
+		////for (theme& c_theme : chip8.themes) {
+		//for (int i = 0; i < 4; i++) {
+		//	const char* str = chip8.themes[i].name.c_str();
+
+		//	ImGui::Selectable(str, chip8.currentTheme == chip8.themes[i]);
+
+		//	if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+		//	{
+		//		chip8.currentTheme = chip8.themes[i];
+		//	}
+		//}
+
+
+		//ImGui::End();
 		
 	}
 };
