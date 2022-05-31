@@ -27,7 +27,7 @@ private:
 	MemoryEditor debug_memoryViewer;
 	ui entire_ui;
 
-	float fTargetFrameTime = 1.0f / 500.0f; // Virtual FPS of 60fps
+	float fTargetFrameTime = 1.0f / 30.0f; // Virtual FPS of 60fps
 	float fAccumulatedTime = 0.0f;
 
 	bus chip8;
@@ -72,11 +72,11 @@ public:
 			{
 				if (chip8.display[y][x] == true)
 				{
-					Draw(x, y, chip8.currentTheme.p32);
+					Draw(x, y, chip8.currentTheme->p32);
 				}
 				else
 				{
-					Draw(x, y, chip8.currentTheme.s32);
+					Draw(x, y, chip8.currentTheme->s32);
 				}
 			}
 		}
@@ -107,7 +107,7 @@ public:
 
 private:
 	void drawImGuiWindows() {
-		//debug_memoryViewer.DrawWindow("Memory viewer ", &chip8.memory.memory, 0xFFF, 0x0);
+		debug_memoryViewer.DrawWindow("Memory viewer ", &chip8.memory.memory, 0xFFF, 0x0);
 		//fs_viewer.createWindow();
 		entire_ui.draw();
 
