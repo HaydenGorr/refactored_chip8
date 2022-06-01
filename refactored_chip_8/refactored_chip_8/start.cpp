@@ -2,6 +2,11 @@
 #define OLC_PGEX_DEAR_IMGUI_IMPLEMENTATION
 #define OLC_PGE_APPLICATION
 
+#define TIME_FLOAT(t) (float)t / CLOCKS_PER_SEC
+
+#define CPU_CLOCK_SPEED 1.f/500.f
+#define TIMER_REFRESH_SPEED 1.f/60.f
+
 #include "olcPixelGameEngine.h"
 
 #include <string>
@@ -10,6 +15,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <time.h>
 
 #include "system_memory.h"
 #include "bus.h"
@@ -27,8 +33,10 @@ private:
 	bool toggleDebug = true;
 	ui entire_ui;
 
-	float fTargetFrameTime = 1.0f / 30.0f; // Virtual FPS of 60fps
 	float fAccumulatedTime = 0.0f;
+
+	clock_t timer_clock;
+	clock_t cpu_clock;
 
 	bus chip8;
 
@@ -38,6 +46,8 @@ public:
 	Example() : pge_imgui(false), entire_ui{ chip8 }
 	{
 		sAppName = "Test Application";
+		timer_clock = clock();
+		cpu_clock = clock();
 	}
 
 public:
@@ -81,14 +91,20 @@ public:
 			}
 		}
 
-		fAccumulatedTime += fElapsedTime;
-		if (fAccumulatedTime >= fTargetFrameTime)
-		{
-			//if (GetKey(olc::Key::SPACE).bHeld)
-			chip8.chip8Sys.run();
+		if (((float)clock() - TIME_FLOAT(timer_clock)) >= TIMER_REFRESH_SPEED) {
+			if (chip8.chip8Sys.delayTimer > 0) {
+				chip8.chip8Sys.delayTimer--;
+			}
 
-			fAccumulatedTime -= fTargetFrameTime;
-			fElapsedTime = fTargetFrameTime;
+			if (chip8.chip8Sys.soundTimer > 0) {
+				chip8.chip8Sys.soundTimer--;
+			}
+			timer_clock = clock();
+		}
+
+		if (((float)clock() - TIME_FLOAT(cpu_clock)) >= CPU_CLOCK_SPEED) {
+			chip8.chip8Sys.run();
+			cpu_clock = clock();
 		}
 
 		if(GetKey(olc::Key::ENTER).bPressed)
@@ -164,6 +180,9 @@ private:
 		//		ImGui::Text(str, i);
 		//}
 		//ImGui::End();
+		}
+
+		ImGui::End();
 
 
 		//ImGui::Begin("Themes");

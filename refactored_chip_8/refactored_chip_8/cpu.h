@@ -18,8 +18,8 @@ private:
 	uint8_t SP; // Stack counter
 
 	// REGISTERS
-	uint8_t delayTimer;
-	uint8_t soundTimer;
+	//uint8_t delayTimer;
+	//uint8_t soundTimer;
 	//uint16_t I; // Address register
 
 	// Stack
@@ -46,6 +46,8 @@ public:
 	// Stack
 	uint16_t stack[16];
 	uint16_t I; // Address register
+	uint8_t delayTimer;
+	uint8_t soundTimer;
 
 	// Get the opcode string from an instruction
 	std::string opStr_instruction(uint16_t);
