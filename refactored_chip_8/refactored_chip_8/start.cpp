@@ -81,6 +81,7 @@ public:
 
 		if ((CURRENT_TIME_FLOAT - TIME_FLOAT(refresh_rate)) >= FPS_SPEED) {
 			render();
+			refresh_rate = clock();
 		}
 
 		if ((CURRENT_TIME_FLOAT - TIME_FLOAT(timer_clock)) >= TIMER_REFRESH_SPEED) {
