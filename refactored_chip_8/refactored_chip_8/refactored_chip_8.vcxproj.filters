@@ -140,5 +140,8 @@
     <ClInclude Include="access_filesystem.h">
       <Filter>Header Files\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="themes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

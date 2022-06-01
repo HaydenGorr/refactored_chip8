@@ -398,3 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 refactored_chip_8/refactored_chip_8/imgui.ini
 refactored_chip_8/refactored_chip_8/imgui.ini
+refactored_chip_8/refactored_chip_8/imgui_log.txt
+refactored_chip_8/refactored_chip_8/imgui.ini

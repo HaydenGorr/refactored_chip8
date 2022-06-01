@@ -16,6 +16,7 @@
 #include "imgui_impl_pge.h"
 #include "memory_viewer.h"
 #include "ui.h"
+#include "access_filesystem.h"
 
 class Example : public olc::PixelGameEngine
 {
@@ -24,7 +25,6 @@ private:
 	int m_GameLayer;
 
 	bool toggleDebug = true;
-	MemoryEditor debug_memoryViewer;
 	ui entire_ui;
 
 	float fTargetFrameTime = 1.0f / 30.0f; // Virtual FPS of 60fps
@@ -35,7 +35,7 @@ private:
 public:
 	//PGE_ImGui can automatically call the SetLayerCustomRenderFunction by passing
 	//true into the constructor.  false is the default value.
-	Example() : pge_imgui(false), debug_memoryViewer{ chip8.chip8Sys }, entire_ui{ chip8 }
+	Example() : pge_imgui(false), entire_ui{ chip8 }
 	{
 		sAppName = "Test Application";
 	}
@@ -107,7 +107,7 @@ public:
 
 private:
 	void drawImGuiWindows() {
-		debug_memoryViewer.DrawWindow("Memory viewer ", &chip8.memory.memory, 0xFFF, 0x0);
+		//debug_memoryViewer.DrawWindow("Memory viewer ", &chip8.memory.memory, 0xFFF, 0x0);
 		//fs_viewer.createWindow();
 		entire_ui.draw();
 
@@ -189,6 +189,7 @@ private:
 int main() {
 	Example demo;
 
+	readConfigIni();
 
 	// We add 12 to the resolution to give the chip8 screen a large border
 	// which we need to give room to the debug window. and because it looks good
