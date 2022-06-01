@@ -3,9 +3,11 @@
 #define OLC_PGE_APPLICATION
 
 #define TIME_FLOAT(t) (float)t / CLOCKS_PER_SEC
+#define CURRENT_TIME_FLOAT (float)clock()
 
 #define CPU_CLOCK_SPEED 1.f/500.f
 #define TIMER_REFRESH_SPEED 1.f/60.f
+#define FPS_SPEED 1.f/60.f
 
 #include "olcPixelGameEngine.h"
 
@@ -30,24 +32,26 @@ private:
 	olc::imgui::PGE_ImGUI pge_imgui;
 	int m_GameLayer;
 
-	bool toggleDebug = true;
-	ui entire_ui;
+	bool toggleDebug = false;
+	ui control_panel_ui;
 
 	float fAccumulatedTime = 0.0f;
 
 	clock_t timer_clock;
 	clock_t cpu_clock;
+	clock_t refresh_rate; 
 
 	bus chip8;
 
 public:
 	//PGE_ImGui can automatically call the SetLayerCustomRenderFunction by passing
 	//true into the constructor.  false is the default value.
-	Example() : pge_imgui(false), entire_ui{ chip8 }
+	Example() : pge_imgui(false), control_panel_ui{ chip8 }
 	{
 		sAppName = "Test Application";
 		timer_clock = clock();
 		cpu_clock = clock();
+		refresh_rate = clock();
 	}
 
 public:
@@ -73,25 +77,13 @@ public:
 		SetDrawTarget((uint8_t)m_GameLayer);
 
 		if(toggleDebug)
-			drawImGuiWindows();
+			control_panel_ui.draw();
 
-		// called once per frame
-		for (uint8_t y = 0; y < chip8.display_res_y; y++)
-		{
-			for (uint8_t x = 0; x < chip8.display_res_x; x++)
-			{
-				if (chip8.display[y][x] == true)
-				{
-					Draw(x, y, chip8.currentTheme->p32);
-				}
-				else
-				{
-					Draw(x, y, chip8.currentTheme->s32);
-				}
-			}
+		if ((CURRENT_TIME_FLOAT - TIME_FLOAT(refresh_rate)) >= FPS_SPEED) {
+			render();
 		}
 
-		if (((float)clock() - TIME_FLOAT(timer_clock)) >= TIMER_REFRESH_SPEED) {
+		if ((CURRENT_TIME_FLOAT - TIME_FLOAT(timer_clock)) >= TIMER_REFRESH_SPEED) {
 			if (chip8.chip8Sys.delayTimer > 0) {
 				chip8.chip8Sys.delayTimer--;
 			}
@@ -102,7 +94,7 @@ public:
 			timer_clock = clock();
 		}
 
-		if (((float)clock() - TIME_FLOAT(cpu_clock)) >= CPU_CLOCK_SPEED) {
+		if ((CURRENT_TIME_FLOAT - TIME_FLOAT(cpu_clock)) >= CPU_CLOCK_SPEED) {
 			chip8.chip8Sys.run();
 			cpu_clock = clock();
 		}
@@ -122,12 +114,27 @@ public:
 	}
 
 private:
+	void render() {
+		// called once per frame
+		for (uint8_t y = 0; y < chip8.display_res_y; y++)
+		{
+			for (uint8_t x = 0; x < chip8.display_res_x; x++)
+			{
+				if (chip8.display[y][x] == true)
+				{
+					Draw(x, y, chip8.currentTheme->p32);
+				}
+				else
+				{
+					Draw(x, y, chip8.currentTheme->s32);
+				}
+			}
+		}
+	}
+
 	void drawImGuiWindows() {
 		//debug_memoryViewer.DrawWindow("Memory viewer ", &chip8.memory.memory, 0xFFF, 0x0);
 		//fs_viewer.createWindow();
-		entire_ui.draw();
-
-		return;
 		
 		//ImGui::Begin("Registers");
 
@@ -180,9 +187,9 @@ private:
 		//		ImGui::Text(str, i);
 		//}
 		//ImGui::End();
-		}
+		//}
 
-		ImGui::End();
+		//ImGui::End();
 
 
 		//ImGui::Begin("Themes");
@@ -207,8 +214,6 @@ private:
 
 int main() {
 	Example demo;
-
-	readConfigIni();
 
 	// We add 12 to the resolution to give the chip8 screen a large border
 	// which we need to give room to the debug window. and because it looks good
