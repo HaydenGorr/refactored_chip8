@@ -39,6 +39,7 @@ private:
 	clock_t timer_clock;
 	clock_t cpu_clock;
 
+public:
 	bus chip8;
 
 public:
@@ -184,7 +185,7 @@ private:
 		ImGui::Begin("Themes");
 
 		//for (theme& c_theme : chip8.themes) {
-		for (int i=0; i<5; i++){
+		for (int i=0; i< chip8.themes.size(); i++) {
 			const char* str = chip8.themes[i].name.c_str();
 
 			ImGui::Selectable(str, (chip8.currentTheme == chip8.themes[i]) ? true : false);
@@ -194,6 +195,9 @@ private:
 			}
 		}
 
+		if (ImGui::Button("Invert")) {
+			chip8.currentTheme.invert();
+		}
 
 		ImGui::End();
 		
@@ -201,8 +205,11 @@ private:
 };
 
 int main() {
-	Example demo;
 
+	//readXML();
+	//print_files_in_dir();
+
+	Example demo;
 
 	// We add 12 to the resolution to give the chip8 screen a large border
 	// which we need to give room to the debug window. and because it looks good
