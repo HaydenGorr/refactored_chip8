@@ -41,6 +41,7 @@ private:
 	clock_t cpu_clock;
 	clock_t refresh_rate; 
 
+public:
 	bus chip8;
 
 public:
@@ -153,6 +154,9 @@ private:
 
 		//}
 
+		//if (ImGui::Button("Invert")) {
+		//	chip8.currentTheme.invert();
+		//}
 
 		//std::stringstream ss1;
 		//ss1 << "  [I]" << " = " << std::hex << static_cast<int>(chip8.chip8Sys.I);

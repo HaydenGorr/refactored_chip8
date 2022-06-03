@@ -1,9 +1,17 @@
 #include "bus.h"
 
-
-
-bus::bus() : currentTheme{ &themes[0] }, chip8Sys(this), currentHeldKey{ 0xFF }, lastKeyPress{ 0xFF }
+bus::bus() : 
+	chip8Sys(this), 
+	currentHeldKey{ 0xFF }, 
+	lastKeyPress{ 0xFF }, 
+	themes{ theme{"Macintosh", t_vect4{51, 51, 25, 255}, t_vect4{229, 255, 255, 255 }} },
+	currentTheme{ themes[0] }
 {
+	themes.clear();
+
+	loadThemesFromJson(*this);
+
+	currentTheme = themes[0];
 
 }
 

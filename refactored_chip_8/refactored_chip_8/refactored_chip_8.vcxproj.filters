@@ -31,11 +31,11 @@
     <Filter Include="Header Files\rendering\imgui_UIs">
       <UniqueIdentifier>{e46778cc-ba68-422d-952c-013027fa90a0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\helpers">
-      <UniqueIdentifier>{d6b32623-bdfb-4531-9063-3ad9dedb2240}</UniqueIdentifier>
+    <Filter Include="Source Files\json">
+      <UniqueIdentifier>{046c7908-3b58-47e8-8c84-2718635423b0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\helpers">
-      <UniqueIdentifier>{161ac22e-fdd5-4b36-8978-30849a3bdf5f}</UniqueIdentifier>
+    <Filter Include="Header Files\json">
+      <UniqueIdentifier>{697defd1-cf5c-4f29-8d0a-f39680eae2de}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,8 +72,11 @@
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
       <Filter>Source Files\rendering\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="access_filesystem.cpp">
-      <Filter>Source Files\helpers</Filter>
+    <ClCompile Include="themes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="json\jsoncpp.cpp">
+      <Filter>Source Files\json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -131,17 +134,20 @@
     <ClInclude Include="imgui\imgui_impl_opengl3_loader.h">
       <Filter>Header Files\rendering\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="file_selector.h">
+      <Filter>Header Files\rendering\imgui_UIs</Filter>
+    </ClInclude>
     <ClInclude Include="memory_viewer.h">
       <Filter>Header Files\rendering\imgui_UIs</Filter>
     </ClInclude>
-    <ClInclude Include="ui.h">
-      <Filter>Header Files\rendering\imgui_UIs</Filter>
-    </ClInclude>
-    <ClInclude Include="access_filesystem.h">
-      <Filter>Header Files\helpers</Filter>
-    </ClInclude>
     <ClInclude Include="themes.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json-forwards.h">
+      <Filter>Header Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json.h">
+      <Filter>Header Files\json</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

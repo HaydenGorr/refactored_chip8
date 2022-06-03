@@ -87,6 +87,8 @@ bool SystemMemory::streamLoadFromFile(const std::string& fileURL)
 	if (size + min_range <= +max_range)
 		file.read((char*)memory + min_range, size);
 
+	file.close();
+
 	return false;
 }
 

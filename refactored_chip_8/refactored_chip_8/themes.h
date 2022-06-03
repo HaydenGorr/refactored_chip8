@@ -2,6 +2,8 @@
 #include <cstdint>
 #include <string>
 
+class bus;
+
 struct t_vect4{	uint8_t r, g, b, a;};
 
 struct theme {
@@ -12,10 +14,7 @@ struct theme {
 
 	uint32_t p32, s32;
 
-	bool operator==(const theme& rhs)
-	{
-		return (name == rhs.name);
-	}
+	bool operator==(const theme& rhs);
 
 	theme(std::string inName, t_vect4 inP, t_vect4 inS) :name{ inName }
 	{
@@ -33,4 +32,11 @@ struct theme {
 	void convertscol_tos32() {
 		s32 = (int)(s_col[0] * 255) | ((int)(s_col[1] * 255) << 8) | ((int)(s_col[2] * 255) << 16) | ((int)(s_col[3] * 255) << 24);
 	}
+	theme(std::string inName, t_vect4 inP, t_vect4 inS);
+
+	void invert();
+
+	void convertVectTo32Bit();
 };
+
+void loadThemesFromJson(bus&);

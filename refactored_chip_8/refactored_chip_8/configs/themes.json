@@ -1,0 +1,38 @@
+
+[
+	{
+		"name": "Macintosh",
+		"primary_RGB": [51, 51, 25, 255],
+		"secondary_rgb": [229, 255, 255, 255]
+	},
+	{
+		"name": "Zenith",
+		"primary_RGB": [63, 41, 30, 255],
+		"secondary_rgb": [253, 202, 85, 255]
+	},
+	{
+		"name": "IBM 8053",
+		"primary_RGB": [46, 48, 55, 255],
+		"secondary_rgb": [235, 229, 206, 255]
+	},
+	{
+		"name": "Commodore 1084",
+		"primary_RGB": [64, 49, 142, 255],
+		"secondary_rgb": [136, 215, 222, 255]
+	},
+	{
+		"name": "IBM 5151",
+		"primary_RGB": [37, 51, 47, 255],
+		"secondary_rgb": [1, 235, 97, 255]
+	},
+	{
+		"name": "Paperback",
+		"primary_RGB": [72, 76, 73, 255],
+		"secondary_rgb": [22, 17, 15, 255]
+	},
+		{
+		"name": "Mac Paint",
+		"primary_RGB": [55, 78, 100, 255],
+		"secondary_rgb": [2, 11, 17, 255]
+	}
+]	
